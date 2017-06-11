@@ -17,6 +17,12 @@ You should see boxes now!
 ## Where does it work?
 Basically everywhere. Even online if you are willing to play with this on.
 
+## What is the meaning of the colors?
+* Orange: Physical boxes (one pushes the other)
+* Green / Blue: Hurtboxes for P1 and P2
+* Red: Hitboxes
+* Gray: Proximity Guard
+
 ## Hide the boxes
 To hide the boxes after the injection. Press F5. To re-enable them, repress F5.
 
