@@ -3,11 +3,15 @@
 
 #include <iostream>
 
-static const unsigned int PHYBOX_COLOR = 0x88FFA500;
-static const unsigned int PLAYER1_HURTBOX_COLOR = 0x8800FF00;
-static const unsigned int PLAYER2_HURTBOX_COLOR = 0x880000FF;
-static const unsigned int HITBOX_COLOR = 0x88FF0000;
-static const unsigned int PROXIMITYBOX_COLOR = 0x88AAAAAA;
+static const unsigned int PHYBOX_COLOR = 0xFFA500;
+static const unsigned int PLAYER1_HURTBOX_COLOR = 0x00FF00;
+static const unsigned int PLAYER2_HURTBOX_COLOR = 0x0000FF;
+static const unsigned int HITBOX_COLOR = 0xFF0000;
+static const unsigned int PROXIMITYBOX_COLOR = 0xAAAAAA;
+static const unsigned int AUTOGUARD_BORDER_COLOR = 0x75FFFF;
+static const unsigned int COUNTER_BORDER_COLOR = 0xFF0000;
+static const unsigned int FILL_MASK = 0x88000000;
+static const unsigned int BORDER_MASK = 0xF8000000;
 
 /**
  * Here lies the injected functions
@@ -60,13 +64,12 @@ bool displayHitboxes = true;
  * IMPL PART
  */
 
-void drawBox(void *g, int screenWidth, int screenHeight, BoxPos *box, unsigned int color) {
+void drawBox(void *g, int screenWidth, int screenHeight, BoxPos *box, unsigned int color, unsigned int borderColor) {
     float scaleRatio = (screenHeight / camera.height) * camera.scale * 5 / 6;
     int x = (int) round((box->x - camera.x) * scaleRatio + screenWidth / 2);
     int y = (int) round(screenHeight / 2 - (box->y - camera.y) * scaleRatio);
     int w = (int) round(box->w * scaleRatio);
     int h = (int) round(box->h * scaleRatio);
-    unsigned int borderColor = color | 0xF0000000;
     GraphicsFillRect(g, x, y, w, h, color, 1);
     GraphicsFillRect(g, x, y, 2, h, borderColor, 1);
     GraphicsFillRect(g, x, y, w, 2, borderColor, 1);
@@ -83,18 +86,30 @@ void drawGroups(void *graphics, int screenWidth, int screenHeight, int from, int
         void *lastEntry = readPointer(rectList, 16);
         while (entry < lastEntry) {
             GetRealHitRect(entry, &realHitRect);
+            unsigned int borderColor;
             if (group == 0) {
                 color = PHYBOX_COLOR;
+                borderColor = color;
             } else if (group >= 1 && group < 9) {
                 color = player == 0 ? PLAYER1_HURTBOX_COLOR : PLAYER2_HURTBOX_COLOR;
+                if (group == 5) {
+                    // Counter
+                    borderColor = COUNTER_BORDER_COLOR;
+                } else if (group == 4) {
+                    // Auto Guard
+                    borderColor = AUTOGUARD_BORDER_COLOR;
+                } else {
+                    borderColor = color;
+                }
             } else {
                 if (readInt(entry, 0x30) < 5) {
                     color = HITBOX_COLOR;
                 } else {
                     color = PROXIMITYBOX_COLOR;
                 }
+                borderColor = color;
             }
-            drawBox(graphics, screenWidth, screenHeight, &realHitRect, color);
+            drawBox(graphics, screenWidth, screenHeight, &realHitRect, color | FILL_MASK, borderColor | BORDER_MASK);
             entry = ptrOffset(entry, 0x1F8);
         }
     }
