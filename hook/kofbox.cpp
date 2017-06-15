@@ -66,7 +66,7 @@ void drawBox(void *g, int screenWidth, int screenHeight, BoxPos *box, unsigned i
     int y = (int) round(screenHeight / 2 - (box->y - camera.y) * scaleRatio);
     int w = (int) round(box->w * scaleRatio);
     int h = (int) round(box->h * scaleRatio);
-    unsigned int borderColor = color | 0xFF000000;
+    unsigned int borderColor = color | 0xF0000000;
     GraphicsFillRect(g, x, y, w, h, color, 1);
     GraphicsFillRect(g, x, y, 2, h, borderColor, 1);
     GraphicsFillRect(g, x, y, w, 2, borderColor, 1);
@@ -128,10 +128,10 @@ void HookedOnKeyInput(void *obj, int key) {
 }
 
 void HookedEasyDraw(void *obj, void *graphics) {
+    EasyDraw(obj, graphics);
     if (displayHitboxes) {
         drawHitboxes(graphics);
     }
-    return EasyDraw(obj, graphics);
 }
 
 void HookedDrawKeyHistory(void *obj, int playerID, void *history, bool bFrameDraw) {
