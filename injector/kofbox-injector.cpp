@@ -8,11 +8,21 @@
 
 #include <easyhook.h>
 
+HWND winhandle = NULL;
+BOOL windowEnumerationCallback(HWND hwnd, LPARAM param) {
+	char buffer[64];
+	GetWindowText(hwnd, buffer, 64);
+	if (strcmp(buffer, "The King Of Fighters XIV") == 0) {
+		winhandle = hwnd;
+		return false;
+	}
+	return true;
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	std::cout << "Loading KOFBox injection!\n";
-
-	HWND winhandle = FindWindow(NULL, "The King of Fighters XIV");
+	EnumWindows(windowEnumerationCallback, NULL);
 	if (!winhandle) {
 		std::cout << "KOF XIV is not running!\n";
 
