@@ -182,8 +182,12 @@ void koflog(const char* text, ...) {
  */
 // EasyHook DLL injection entry point
 extern "C" void __declspec(dllexport) __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO *inRemoteInfo);
-
+BOOL hasBeenInjected = FALSE;
 void __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO *inRemoteInfo) {
+    if (hasBeenInjected) {
+        return;
+    }
+    hasBeenInjected = TRUE;
     // Dark magic!
     BYTE agTracePattern[] = {
             0x48, 0x89, 0x4C, 0x24, 0x08, 0x48, 0x89, 0x54, 0x24, 0x10, 0x4C, 0x89, 0x44, 0x24, 0x18, 0x4C, 0x89, 0x4C,
