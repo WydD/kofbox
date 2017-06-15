@@ -1,7 +1,7 @@
+#include <cmath>
+#include <cstdio>
 #include "stdafx.h"
 #include "hook_util.h"
-
-#include <iostream>
 
 static const unsigned int PHYBOX_COLOR = 0xFFA500;
 static const unsigned int PLAYER1_HURTBOX_COLOR = 0x00FF00;
@@ -9,7 +9,7 @@ static const unsigned int PLAYER2_HURTBOX_COLOR = 0x0000FF;
 static const unsigned int PROJECTILE_HURTBOX_COLOR = 0xFFFFFF;
 static const unsigned int HITBOX_COLOR = 0xFF0000;
 static const unsigned int PROXIMITYBOX_COLOR = 0xAAAAAA;
-static const unsigned int AUTOGUARD_BORDER_COLOR = 0x75FFFF;
+static const unsigned int AUTOGUARD_BORDER_COLOR = 0x00FFFF;
 static const unsigned int COUNTER_BORDER_COLOR = 0xFF0000;
 static const unsigned int FILL_MASK = 0x88000000;
 static const unsigned int BORDER_MASK = 0xF8000000;

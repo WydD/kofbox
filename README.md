@@ -20,14 +20,17 @@ Basically everywhere. Even online if you are willing to play with this on.
 ## What is the meaning of the colors?
 * Orange: Physical boxes (one pushes the other)
 * Green / Blue: Hurtboxes for P1 and P2
+    * Red border: Counter
+    * Light Blue border: Guard-Point
 * Red: Hitboxes
 * Gray: Proximity Guard
+* White: Projectile hurtboxes (useless?)
 
 ## Hide the boxes
 To hide the boxes after the injection. Press F5. To re-enable them, repress F5.
 
 ## Will this hold against updates?
-It held during all beta updates so, "most surely".
+It should but I had to update it for the day one release, so we'll see.
 
 ## How do you do that?
 Well the code is available but I use plenty of dark magic there so... can't tell you much more.
