@@ -6,6 +6,7 @@
 static const unsigned int PHYBOX_COLOR = 0xFFA500;
 static const unsigned int PLAYER1_HURTBOX_COLOR = 0x00FF00;
 static const unsigned int PLAYER2_HURTBOX_COLOR = 0x0000FF;
+static const unsigned int PROJECTILE_HURTBOX_COLOR = 0xFFFFFF;
 static const unsigned int HITBOX_COLOR = 0xFF0000;
 static const unsigned int PROXIMITYBOX_COLOR = 0xAAAAAA;
 static const unsigned int AUTOGUARD_BORDER_COLOR = 0x75FFFF;
@@ -80,19 +81,24 @@ void drawBox(void *g, int screenWidth, int screenHeight, BoxPos *box, unsigned i
 void drawGroups(void *graphics, int screenWidth, int screenHeight, int from, int to, void *hitRectListBase, int player) {
     BoxPos realHitRect;
     unsigned int color;
+    unsigned int borderColor;
     for (int group = from; group < to; ++group) {
         void *rectList = readPointer(hitRectListBase, player * 120 + group * 8);
         void *entry = readPointer(rectList, 8);
         void *lastEntry = readPointer(rectList, 16);
         while (entry < lastEntry) {
             GetRealHitRect(entry, &realHitRect);
-            unsigned int borderColor;
             if (group == 0) {
                 color = PHYBOX_COLOR;
                 borderColor = color;
             } else if (group >= 1 && group < 9) {
                 color = player == 0 ? PLAYER1_HURTBOX_COLOR : PLAYER2_HURTBOX_COLOR;
-                if (group == 5) {
+                void* parent = readPointer(entry, 0x18);
+                void* owner = readPointer(entry, 0x20);
+                if (parent != owner) {
+                    color = PROJECTILE_HURTBOX_COLOR;
+                    borderColor = color;
+                } else if (group == 5) {
                     // Counter
                     borderColor = COUNTER_BORDER_COLOR;
                 } else if (group == 4) {
