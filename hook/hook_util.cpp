@@ -7,6 +7,7 @@
 
 const BYTE *findPointer(const BYTE *drawKeyHistoryPattern, int length, const MODULEINFO *moduleInfo, int ignoreFrom, int ignoreTo) {
     const BYTE *end = (BYTE *) (moduleInfo->lpBaseOfDll) + moduleInfo->SizeOfImage;
+    BYTE * result = nullptr;
     for (BYTE *current = (BYTE *) moduleInfo->lpBaseOfDll; current < end; ++current) {
         if (*current != drawKeyHistoryPattern[0]) {
             continue;
@@ -22,23 +23,30 @@ const BYTE *findPointer(const BYTE *drawKeyHistoryPattern, int length, const MOD
             }
         }
         if (found) {
-            koflog("Found pointer!");
-            return current;
+            if (result == nullptr) {
+                koflog("Found pointer!");
+            } else {
+                koflog("Found duplicate!!! Abort the mission!");
+                return nullptr;
+            }
+            result = current;
         }
     }
-    koflog("Couldnt find pointer!");
-    return NULL;
+    if (result == nullptr) {
+        koflog("Couldnt find pointer!");
+    }
+    return result;
 }
 
 bool installHook(void *toHook, void *hookFunction) {
     // Perform hooking
-    HOOK_TRACE_INFO hHook = {NULL}; // keep track of our hook
+    HOOK_TRACE_INFO hHook = {nullptr}; // keep track of our hook
 
     // Install the hook
     NTSTATUS nt = LhInstallHook(
             toHook,
             hookFunction,
-            NULL,
+            nullptr,
             &hHook);
 
     if (nt != 0) {

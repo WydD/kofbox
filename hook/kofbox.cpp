@@ -14,6 +14,7 @@ static const unsigned int COUNTER_BORDER_COLOR = 0xFF0000;
 static const unsigned int FILL_MASK = 0x88000000;
 static const unsigned int BORDER_MASK = 0xF8000000;
 
+static const unsigned int pCameraControlOffset = 0x3A0D0;
 /**
  * Here lies the injected functions
  */
@@ -162,11 +163,11 @@ void HookedDrawKeyHistory(void *obj, int playerID, void *history, bool bFrameDra
 void HookedAttackHitCheck(void *actionSystem) {
     AttackHitCheck(actionSystem);
     // gather camera data
-    camera.x = readFloat(actionSystem, 0x21E10 + 0x1FC);
-    camera.y = readFloat(actionSystem, 0x21E10 + 0x1FC + 4);
-    camera.z = readFloat(actionSystem, 0x21E10 + 0x1FC + 8);
-    camera.height = readFloat(actionSystem, 0x21E10 + 0x60) * 2;
-    camera.scale = readFloat(actionSystem, 0x21E10 + 0x5C) / camera.z;
+    camera.x = readFloat(actionSystem, pCameraControlOffset + 0x1FC);
+    camera.y = readFloat(actionSystem, pCameraControlOffset + 0x1FC + 4);
+    camera.z = readFloat(actionSystem, pCameraControlOffset + 0x1FC + 8);
+    camera.height = readFloat(actionSystem, pCameraControlOffset + 0x60) * 2;
+    camera.scale = readFloat(actionSystem, pCameraControlOffset + 0x5C) / camera.z;
 }
 
 
