@@ -8,7 +8,7 @@
 const BYTE *findPointer(const BYTE *drawKeyHistoryPattern, int length, const MODULEINFO *moduleInfo, int ignoreFrom, int ignoreTo) {
     const BYTE *end = (BYTE *) (moduleInfo->lpBaseOfDll) + moduleInfo->SizeOfImage;
     BYTE * result = nullptr;
-    for (BYTE *current = (BYTE *) moduleInfo->lpBaseOfDll; current < end; ++current) {
+    for (auto *current = (BYTE *) moduleInfo->lpBaseOfDll; current < end; ++current) {
         if (*current != drawKeyHistoryPattern[0]) {
             continue;
         }

@@ -19,19 +19,19 @@ static const unsigned int pCameraControlOffset = 0x3A0D0;
  * Here lies the injected functions
  */
 
-void (*DrawKeyHistory)(void *obj, int playerID, void *history, bool bFrameDraw) = NULL;
+void (*DrawKeyHistory)(void *obj, int playerID, void *history, bool bFrameDraw) = nullptr;
 
-void (*EasyDraw)(void *obj, void *graphics) = NULL;
+void (*EasyDraw)(void *obj, void *graphics) = nullptr;
 
-void (*AttackHitCheck)(void *actionSystem) = NULL;
+void (*AttackHitCheck)(void *actionSystem) = nullptr;
 
-void *(*GetRealHitRect)(void *obj, void *result) = NULL;
+void *(*GetRealHitRect)(void *obj, void *result) = nullptr;
 
-void (*GraphicsFillRect)(void *graphics, int x, int y, int width, int height, unsigned int color, char bDraw) = NULL;
+void (*GraphicsFillRect)(void *graphics, int x, int y, int width, int height, unsigned int color, char bDraw) = nullptr;
 
-void (*OnKeyInput)(void *obj, int key) = NULL;
+void (*OnKeyInput)(void *obj, int key) = nullptr;
 
-void (*AgTrace)(const char *text, ...) = NULL;
+void (*AgTrace)(const char *text, ...) = nullptr;
 
 void *HitRectCollectionInstance;
 
@@ -68,10 +68,10 @@ bool displayHitboxes = true;
 
 void drawBox(void *g, int screenWidth, int screenHeight, BoxPos *box, unsigned int color, unsigned int borderColor) {
     float scaleRatio = (screenHeight / camera.height) * camera.scale * 5 / 6;
-    int x = (int) round((box->x - camera.x) * scaleRatio + screenWidth / 2);
-    int y = (int) round(screenHeight / 2 - (box->y - camera.y) * scaleRatio);
-    int w = (int) round(box->w * scaleRatio);
-    int h = (int) round(box->h * scaleRatio);
+    auto x = (int) round((box->x - camera.x) * scaleRatio + screenWidth / 2.0);
+    auto y = (int) round(screenHeight / 2.0 - (box->y - camera.y) * scaleRatio);
+    auto w = (int) round(box->w * scaleRatio);
+    auto h = (int) round(box->h * scaleRatio);
     GraphicsFillRect(g, x, y, w, h, color, 1);
     GraphicsFillRect(g, x, y, 2, h, borderColor, 1);
     GraphicsFillRect(g, x, y, w, 2, borderColor, 1);
@@ -80,7 +80,7 @@ void drawBox(void *g, int screenWidth, int screenHeight, BoxPos *box, unsigned i
 }
 
 void drawGroups(void *graphics, int screenWidth, int screenHeight, int from, int to, void *hitRectListBase, int player) {
-    BoxPos realHitRect;
+    BoxPos realHitRect{};
     unsigned int color;
     unsigned int borderColor;
     for (int group = from; group < to; ++group) {
@@ -272,5 +272,4 @@ void __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO *inRemoteInfo) {
         return;
     };
     koflog("Ready to go!");
-    return;
 }
